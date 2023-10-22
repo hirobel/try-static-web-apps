@@ -1,3 +1,11 @@
+// 現在のURLがHTTPサーバから配信されている場合、本番環境と見なし
+// Azure FunctionsのURLを設定します。
+// それ以外の場合（例えば、ファイルがローカルで開かれている場合）は、
+// 開発環境と見なし、localhostのURLを設定します。
+const BASE_URL = window.location.protocol.startsWith('http') ?
+    'https://proud-pebble-02ad55800.4.azurestaticapps.net/api' :
+    'http://localhost:3000';
+
 document.getElementById('todo-form').addEventListener('submit', async function (e) {
     e.preventDefault();
 
@@ -16,9 +24,8 @@ document.getElementById('todo-form').addEventListener('submit', async function (
 });
 
 async function loadTodos() {
-    const res = await fetch('http://localhost:3000/todos');
+    const res = await fetch(`${BASE_URL}/todos`);
     const todos = await res.json();
-
     todos.forEach(renderTodo);
 }
 
